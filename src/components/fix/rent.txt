@@ -1,0 +1,97 @@
+REACT 
+
+0 + 100 = 100
+100 + 100 = 200
+200 + 100 = 300
+300 + 100 = 400
+
+0 + 100 = 100
+100 + 200 index===idx (previous + new) = 300
+300 + 100 (current + new) = 400
+400 + 100 (current + new) = 500
+
+..............
+
+0) 0 + 100 = 100
+
+1) 100 + 300 index===idx (previous + new) = 400
+
+2) 400 + 100 (current + new) = 500
+3) 500 + 100 (current + new) = 600
+
+================
+EMAIL SENT DATE: 4/18/2012
+
+Dec - paid
+Jan - paid
+
+Feb - 900 + 2/26- 500 = FEB 1400 + 3/12 - 400 = FEB paid
+MARCH 250 + 1100(4/11) = MARCH 1350
+
+============
+Function to add value 'owed' propperty from array objects. map n reduce
+
+amount.map( el => el.owed).reduce( (total, el) => total + el)
+
+R.compose(
+	R.reduce(R.add, 0),
+	R.pluck('owed')
+)(amount)
+
+============
+Update ID from a cerntain index
+
+arr.map( (el, idx) => {
+	if(idx > 0){
+		return {
+			...el,
+			id: el.id += 1
+		}
+	}
+	return el;
+});
+
+===========
+Delete empty props 
+
+arr.map(el => {
+	if(!el.payment2){
+		delete el.payment2 
+	}
+	if(!el.date2){
+		delete el.date2 
+	}
+	if(!el.payment3){
+		delete el.payment3 
+	}
+	if(!el.date3){
+		delete el.date3 
+	}
+	return el
+
+=========
+DELETE $
+
+var s = '$500 ';
+
+var format = (str) => {
+	str = str.trim()
+	if(str.indexOf('$') === 0) 
+		return str.slice(1)
+};
+
+format(s)
+})
+
+==========
+
+edit
+
+arr
+	.map((el, idx) => {
+		if(idx >= 1){
+			return el.monthTotal
+		}
+		return 0;
+	})
+	.reduce((accu, el, idx) => accu + el)
