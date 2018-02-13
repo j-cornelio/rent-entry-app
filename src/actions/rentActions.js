@@ -1,11 +1,13 @@
 import request from 'superagent';
+import * as actionTypes from './actionTypes';
+
  /* eslint-disable */
-const APIURL = 'http://rest.learncode.academy/api/ivonne/rent';
-const APIURLPOST = 'http://rest.learncode.academy/api/ivonne/';
+const APIURL      = 'http://rest.learncode.academy/api/ivonne/rent';
+const APIURLPOST  = 'http://rest.learncode.academy/api/ivonne/';
 
 export const addRent = (amount, id) => {
   return {
-    type    : 'ADD_RENT',
+    type    : actionTypes.ADD_RENT,
     amount,
     id
   }
@@ -13,7 +15,7 @@ export const addRent = (amount, id) => {
 
 export const editRent = (month, id, amount, index, date) => {
   return {
-    type    : 'EDIT_RENT',
+    type    : actionTypes.EDIT_RENT,
     id,
     amount,
     index,
@@ -27,7 +29,7 @@ export const postAmounts = (data) => {
     return request.post(APIURL) 
     	.send(data)
       .then( response => { //also returns promise 
-     		console.log('%c yay got ', 'background:lime', JSON.stringify(response.body));
+     		console.log('%c rsonponse ', 'background:lime', JSON.stringify(response.body));
       })
   }
 };
@@ -45,7 +47,7 @@ export const fetchAmounts = () => {
 
         dispatch( isAmountLoading(false) );
 
-     		console.log('%c RESPONSE SON ======= >>>>>> ', 'background:lime', response.body);
+     		console.log('%c RESPONSE ', 'background:lime', response.body);
         return response; // returns to next chained then
       })
       .then( response => { 
@@ -60,13 +62,13 @@ export const fetchAmounts = () => {
 };
 export const fetchAmountSuccess = (amount) => {
   return {
-    type 						: 'FETCH_AMOUNT_SUCCESS',
+    type 						: actionTypes.FETCH_AMOUNT_SUCCESS,
     amount 					: amount,
   }
 };
 export const isAmountLoading = (bool) => {
   return {
-    type            : 'AMOUNT_IS_LOADING',
+    type            : actionTypes.AMOUNT_IS_LOADING,
     isAmountLoading : bool
   }
 };

@@ -1,22 +1,22 @@
 const RENTAMOUNT = 1550;
-// localStorage.rents==='null'
+
+// temporaty storage.  laster store in SQL
 var inital = !!localStorage.rents ? JSON.parse(localStorage.rents) : [];
 
-const 
-	getProperties 	= (amount) => (
+const getProperties 	= (amount) => (
 		Object.keys(amount)
 			.filter( el => el==='payment1' || el==='payment2' || el==='payment3')
-	),
+	);
 
-	addAllPayments 	= (payments, action) => ( 
+const addAllPayments 	= (payments, action) => ( 
 		payments
 			.map(prop => Number(action.amount[prop]))
 			.reduce( (total, pay) => total + pay)
-	),
+	);
 
-	amountOwed 			= (month) => RENTAMOUNT - month,
-	getLastElem 		= (arr) => arr[arr.length - 1],
-	totalOwed 			= (amount) => (!!amount && !!amount.owed) ? amount.owed : 0;
+const amountOwed 			= (month) => RENTAMOUNT - month;
+const getLastElem 			= (arr) => arr[arr.length - 1];
+const totalOwed 			= (amount) => (!!amount && !!amount.owed) ? amount.owed : 0;
 
 export const rentReducer = (state=inital, action={}) => {
 	switch(action.type){
@@ -24,7 +24,7 @@ export const rentReducer = (state=inital, action={}) => {
 
 			const 
 				payments 		= getProperties(action.amount),
-				monthTotal 	= addAllPayments(payments, action),
+				monthTotal 		= addAllPayments(payments, action),
 				total 			= amountOwed(monthTotal),
 				current 		= getLastElem(state),
 				//when first loads not true. check obj n prop. get later value that's owed
@@ -40,7 +40,7 @@ export const rentReducer = (state=inital, action={}) => {
 						date2 	 		: action.amount.date2,
 						payment3 		: action.amount.payment3,
 						date3 	 		: action.amount.date3,
-						id 		 	 		: action.id,
+						id 		 	 	: action.id,
 						owed	   		: owing + total,
 						monthTotal    
 					}

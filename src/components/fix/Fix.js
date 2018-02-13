@@ -1,43 +1,33 @@
 import React, { Component }     from 'react';
 /* eslint-disable */
-import * as rentActions  		from '../../actions/rentActions';
-import { connect } 				from 'react-redux';
-import PropTypes  				from 'prop-types';
-import FormAdd  				from './FormAdd';
-import AmountList    			from './containers/AmountList';
-
-var names = [{name:'aaa'}, {name:'bbb'}, {name:'ccc'}, {name:'ddd'}, {name:'eee'}, {name:'fff'}, {name:'ggg'}, {name:'hhh'}, {name:'iii'}, {name:'jjj'}, {name:'kkk'}, {name:'lll'}, {name:'mmm'}, {name:'nnn'}, {name:'ooo'}, {name:'ppp'}, {name:'qqq'}, {name:'rrr'}, {name:'sss'}, {name:'ttt'}, {name:'uuu'}, {name:'vvv'}, {name:'www'}, {name:'xxx'}, {name:'yyy'}, {name:'zzz'}, {name:'AAA'}, {name:'BBB'}, {name:'CCC'}, {name:'DDD'}];
-
-/*
-NOTE:
-  - constructor functions need binding
-  - mapping - index goes on constructor
-	- looping can spread in {...item}
-	- component single root elem
-	- presentational comp don't specify behavior
-*/
+import * as rentActions  				from '../../actions/rentActions';
+import { connect } 							from 'react-redux';
+import PropTypes  							from 'prop-types';
+import FormAdd  								from './FormAdd';
+import AmountList    						from './containers/amount-data/AmountList';
 
 class Amount extends Component{
+	static propTypes = {
+	  amount: PropTypes.array.isRequired,
+	};
+
 	state = {
-		edit 	 	: false,
-		update 		: false,
-		updateIndex : null
+		amount 			: [],
+		edit 	 			: false,
+		update 			: false,
+		updateIndex : 0
 	}
-	// componentDidMount(){
-	// 	this.props.fetchAmounts();
-	// }
-	componentWillUpdate(nextProps, nextState){
-		//console.log('nextProps last obj on amount arr', nextProps.amount[nextProps.amount.length-1]);
-	}
+
 	toggleEdit(){
 		this.setState((state, props) => {
 			return { 
 				edit 	 			: !state.edit,
 				update 			: false,
-				updateIndex : false
+				updateIndex : 0
 			}
 		})
 	}
+
 	toggleUpdate(idx){
 		this.setState((state, props) => {
 			return { 
@@ -77,7 +67,3 @@ const mapDispatchProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchProps)(Amount);
-
-Amount.propTypes = {
-  amount: PropTypes.array,
-};

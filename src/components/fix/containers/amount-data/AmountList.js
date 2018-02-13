@@ -1,9 +1,9 @@
 import React, { Component }     from 'react';
 //import * as todoActions  			from '../../../actions/todoActions';
 import * as rentActions  				from '../../../../actions/rentActions';
-import { connect } 						from 'react-redux';
-import PropTypes  						from 'prop-types';
-import Pagination    					from '../../pagination/Pagination';
+import { connect } 							from 'react-redux';
+import PropTypes  							from 'prop-types';
+import Pagination    						from '../../../pagination/Pagination';
 import Amount    						from './Amount';
 
 /*

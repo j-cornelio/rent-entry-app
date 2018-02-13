@@ -1,3 +1,10 @@
+export const ADD_RENT 					= 'ADD_RENT';
+export const EDIT_RENT 					= 'EDIT_RENT';
+
+export const FETCH_AMOUNT_SUCCESS 		= 'FETCH_AMOUNT_SUCCESS';
+export const AMOUNT_IS_LOADING 			= 'AMOUNT_IS_LOADING';
+
+
 export const CREATE_BOOK_SUCCESS 		= 'CREATE_BOOK_SUCCESS';
 export const FETCH_BOOK_SUCCESS 		= 'FETCH_BOOK_SUCCESS';
 export const FETCH_BOOK_BY_ID_SUCCESS 	= 'FETCH_BOOK_BY_ID_SUCCESS';
