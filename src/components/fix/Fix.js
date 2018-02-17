@@ -15,7 +15,7 @@ class Amount extends Component{
 		amount 			: [],
 		edit 	 			: false,
 		update 			: false,
-		updateIndex : 0
+		updateIndex : null
 	}
 
 	toggleEdit(){

@@ -10,7 +10,6 @@ const Amount = ({item, index, edit, editRent, update, toggleUpdate, show}) => {
 				className="edit" 
 				style={{display: !!edit ? 'block' : 'none'}} 
 				onClick={(e) => {
-					alert('AMOUNT')
 					toggleUpdate(index);
 				}}
 			>
