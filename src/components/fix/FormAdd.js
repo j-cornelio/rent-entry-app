@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes     		from 'prop-types';
+import * as rentActions  	from '../../actions/rentActions';
+import { connect } 			from 'react-redux';
 
 /*
 NOTE: e.preventDefault on buttons. refreshes page
@@ -119,12 +121,8 @@ const FormData = ({data, addInput, removeInput, addRent}) => {
 //
 class FormAdd extends Component{
 	static propTypes = {
-		addInput: PropTypes.func, 
-		addRent: PropTypes.func,
+		addRent: PropTypes.func, 
 		amount: PropTypes.array,
-		data: PropTypes.array,
-		getData: PropTypes.func,
-		removeInput: PropTypes.func,
     }
 
 	state = {
@@ -179,4 +177,20 @@ class FormAdd extends Component{
 	}
 };
 
-export default FormAdd;
+
+// passed as props to Component
+const mapStateToProps = (state) => {
+	return {
+		amount : state.amount,
+	}
+};
+
+const mapDispatchProps = (dispatch) => {
+	return {
+		addRent  : (text, id) => dispatch( rentActions.addRent(text, id) ),
+		// postAmounts  : (data) => dispatch( rentActions.postAmounts(data) ),
+		// fetchAmounts : () => dispatch( rentActions.fetchAmounts() )
+	}
+};
+
+export default connect(mapStateToProps, mapDispatchProps)(FormAdd);

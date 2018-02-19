@@ -17,12 +17,12 @@ class AmountList extends Component{
 		editRent 		: PropTypes.func.isRequired,
 		toggleUpdate 	: PropTypes.func.isRequired,
 		update 			: PropTypes.bool,
-		updateIndex 	: PropTypes.number.isRequired
+		//updateIndex 	: PropTypes.null
 	}
 
 	static defaultProps = {
 		edit 			: false,
-		update 			: false
+		update 			: false,
 	}
 	 
 
