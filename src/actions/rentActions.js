@@ -24,6 +24,13 @@ export const editRent = (month, id, amount, index, date) => {
   }
 };
 
+export const validate = (payload) => {
+  return {
+    type: actionTypes.VALIDATE,
+    payload
+  }
+};
+
 export const postAmounts = (data) => {
   return (dispatch) => {
     return request.post(APIURL) 

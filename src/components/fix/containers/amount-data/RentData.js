@@ -23,6 +23,7 @@ const RentData = ({item, update, index, updateIndex, show, editRent}) => {
 				<p>Amount Paid: ${item.payment1} -  Date: {item.date1}</p>
 				<p style={{'display': item.payment2 ? 'block' : 'none'}}>Amount Paid: ${item.payment2} -  Date: {item.date2}</p>
 				<p style={{'display': item.payment3 ? 'block' : 'none'}}>Amount Paid: ${item.payment3} -  Date: {item.date3}</p>
+				<p style={{'display': item.payment4 ? 'block' : 'none'}}>Amount Paid: ${item.payment4} -  Date: {item.date4}</p>
 				<h6>Total Month Paid: ${item.monthTotal}</h6>
 				<h6>Amount Owed: <span className="owed">${item.owed}</span></h6>	
 			</div>

@@ -4,18 +4,18 @@ const RENTAMOUNT = 1550;
 var inital = !!localStorage.rents ? JSON.parse(localStorage.rents) : [];
 
 const getProperties 	= (amount) => (
-		Object.keys(amount)
-			.filter( el => el==='payment1' || el==='payment2' || el==='payment3')
-	);
+	Object.keys(amount)
+		.filter( el => el==='payment1' || el==='payment2' || el==='payment3' || el==='payment4')
+);
 
 const addAllPayments 	= (payments, action) => ( 
-		payments
-			.map(prop => Number(action.amount[prop]))
-			.reduce( (total, pay) => total + pay)
-	);
+	payments
+		.map(prop => Number(action.amount[prop]))
+		.reduce( (total, pay) => total + pay)
+);
 
 const amountOwed 			= (month) => RENTAMOUNT - month;
-const getLastElem 			= (arr) => arr[arr.length - 1];
+const getLastElem 		= (arr) => arr[arr.length - 1];
 const totalOwed 			= (amount) => (!!amount && !!amount.owed) ? amount.owed : 0;
 
 export const rentReducer = (state=inital, action={}) => {
@@ -24,7 +24,7 @@ export const rentReducer = (state=inital, action={}) => {
 
 			const 
 				payments 		= getProperties(action.amount),
-				monthTotal 		= addAllPayments(payments, action),
+				monthTotal 	= addAllPayments(payments, action),
 				total 			= amountOwed(monthTotal),
 				current 		= getLastElem(state),
 				//when first loads not true. check obj n prop. get later value that's owed
@@ -40,6 +40,8 @@ export const rentReducer = (state=inital, action={}) => {
 						date2 	 		: action.amount.date2,
 						payment3 		: action.amount.payment3,
 						date3 	 		: action.amount.date3,
+						payment4 		: action.amount.payment4,
+						date4 	 		: action.amount.date4,
 						id 		 	 	: action.id,
 						owed	   		: owing + total,
 						monthTotal    
@@ -121,5 +123,14 @@ export const isAmountLoading = (state=[], action) => {
 			
 		default:
 			return state;
+	}
+};
+
+export const validate = (state=[], action) => {
+	switch(action.type){
+		case 'VALIDATE':
+			return action.payload
+		default:
+			return state
 	}
 };

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes     		from 'prop-types';
 import * as rentActions  	from '../../actions/rentActions';
+import ErrorDisplay 		from '../Error';
 import { connect } 			from 'react-redux';
 
 /*
@@ -12,16 +13,16 @@ var count = 1;
 
 /* eslint-disable */
 const 
-	SPECIALC 		= /[^\w\-/]/, 
+	SPECIALC 		= /[^\w\-/ ]/, 
 	data 			= [{payment:'payment 1', date:'date 1'}],
 	removeSpaces 	= str => str.replace(/ +/g, ""),
 	randomNum 		= () => Math.floor(Math.random() * 1000000000); 
 
 const getData = (elem) => {
-	let inputValues	=	{},
-			form 				= document.querySelector(elem);
+	let inputValues	= {},
+			form 	= document.querySelector(elem);
 			
-	for(var i=0; i<form.length; i+=1){//myForm not reat array
+	for(var i=0; i<form.length; i+=1){//myForm not React array
 		if(form[i].type === 'text'){
 			var propName = removeSpaces(form[i].placeholder);
 			inputValues[propName] = form[i].value 			
@@ -31,20 +32,42 @@ const getData = (elem) => {
 	return inputValues;
 }
 
-const validate = (values, addRent) => {
-	let form 			= document.querySelector('#dataForm'),
-			regTest 	= false;
+const valid = (values, addRent, validate) => {
+	let 
+		form 	= document.querySelector('#dataForm'),
+		inputs 	= form.getElementsByTagName('input'),
+		regTest = false,
+		message = [];
 
-	Object.keys(values).forEach( el =>  {
-		if(values[el].length === 0){
-			alert(`${el} is empty`);
+	//for inputs
+	for(var key of inputs){
+		key.classList.remove('errorInput');
+
+		if(SPECIALC.test( key.value )){
+			key.classList.add('errorInput');
+			key.nextSibling.innerText = 'special characters';
 		}
-		
-		if(SPECIALC.test( values[el] )){
-			alert('Remove special character');
-			regTest = true;
-		}
-	});
+
+		if(key.value.length === 0){
+			key.classList.add('errorInput');
+			key.nextSibling.innerText = 'required field';
+	    }
+	}
+
+	// for error message box
+	Object.keys(values)
+		.forEach( el =>  {
+			if(values[el].length === 0){
+				message.push(el + ' is empty');
+			}
+			
+			if(SPECIALC.test( values[el] )){
+				message.push(el + ' Please remove special characters');
+				regTest = true;
+			}
+		});
+
+	validate(message);
 
 	const 
 		vals 		= Object.values(values),
@@ -55,52 +78,75 @@ const validate = (values, addRent) => {
 		form[0].focus();
 		addRent(values, randomNum());
 	}
-}
+};
 
-const Inputs = ({payment,  date, addRent}) => {
+const Inputs = ({payment,  date, addRent, validate}) => {
 	var inputValues = {};
 	return (
-		<div>
-			<input placeholder={payment} type="text" />
-			<input placeholder={date} type="text" onKeyPress={(e)=> {
-					if(e.charCode === 13){
-						e.preventDefault();
+		<div className="flex-container">
+			<div className="child">
+				<input placeholder={payment} type="text" />
+				<p className="errorMessage"></p>
+			</div>
+			<div className="child">
+				<input placeholder={date} type="text" onKeyPress={(e)=> {
+						if(e.charCode === 13){
+							e.preventDefault();
 
-						inputValues = getData('#dataForm');
+							inputValues = getData('#dataForm');
 
-						validate(inputValues, addRent);
-						
-					}
-				}} 
-			/>
+							valid(inputValues, addRent, validate);
+						}
+					}}
+				/>
+				<p className="errorMessage">Date is required</p>
+			</div>
 		</div>
 	)
 }//
+Inputs.propTypes = {
+	data: PropTypes.array, 
+	addInput: PropTypes.func.isRequired, 
+	removeInput: PropTypes.func.isRequired, 
+	addRent: PropTypes.func.isRequired, 
+	validate: PropTypes.func,
+  	errors: PropTypes.array
+};
+Inputs.defaultProps = {
+	data: [],
+  	errors: [],
+  	validate: function(){}
+};
 
-const FormData = ({data, addInput, removeInput, addRent}) => {
+const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
+	// for needs id cuz inputs are added dynamicall
 	let myForm={}, inputValues={};
 
 	return (
 		<form  id="dataForm" ref={(form) => myForm = form}>
-			<input placeholder='month' type="text" />
+			<ErrorDisplay errors={errors} />
+			
+			<input placeholder='month' id="month" type="text" />
+			<p className="errorMessage">Month is required</p>
+
 			{data.map( (el, idx) => (
-					<Inputs 
-						{...el} 
-						addRent={addRent}
-						myForm={myForm}
-						removeInput={removeInput} 
-						addInput={addInput} 
-						key={idx}
+					<Inputs
+						{...el}
+						addRent 	= {addRent}
+						myForm		= {myForm}
+						removeInput = {removeInput} 
+						addInput 	= {addInput} 
+						key 		= {idx}
 					/>
 				)
 			)}
 
-			<input type="button" value="Send" onClick={(e) => {
+			<button onClick={(e) => {
 				e.preventDefault();
 				inputValues = getData('#dataForm');
 
-				validate(inputValues, addRent);
-			}} />
+				valid(inputValues, addRent, validate);
+			}}>Send Data</button>
 
 			<button onClick={(e) => {
 				e.preventDefault();
@@ -117,12 +163,24 @@ const FormData = ({data, addInput, removeInput, addRent}) => {
 			</button>
 		</form>
 	)
+};//
+FormData.propTypes = {
+	data: PropTypes.array, 
+	addInput: PropTypes.func.isRequired, 
+	removeInput: PropTypes.func.isRequired, 
+	addRent: PropTypes.func.isRequired, 
+	validate: PropTypes.func.isRequired,
+  	errors: PropTypes.array
 };
-//
+FormData.defaultProps = {
+	data: [],
+  	errors: []
+};
+
 class FormAdd extends Component{
 	static propTypes = {
-		addRent: PropTypes.func, 
-		amount: PropTypes.array,
+		addRent: PropTypes.func.isRequired,
+		amount: PropTypes.array.isRequired,
     }
 
 	state = {
@@ -160,7 +218,7 @@ class FormAdd extends Component{
 	}
 
 	getData(data){
-		console.log('%c data: ', 'background:lime', data);
+		console.log('%c getData data: ', 'background:lime', data);
 	}
 
 	render(){
@@ -168,26 +226,28 @@ class FormAdd extends Component{
 			<FormData 
 				{...this.state} 
 				{...this.props}
-				addRent={this.props.addRent}
-				getData={this.getData.bind(this)} 
-				removeInput={this.removeInput.bind(this)} 
-				addInput={this.addInput.bind(this)} 
+				addRent 		= {this.props.addRent}
+				getData			= {this.getData.bind(this)} 
+				removeInput 	= {this.removeInput.bind(this)} 
+				addInput		= {this.addInput.bind(this)} 
 			/>
 		)
 	}
-};
-
+};//
 
 // passed as props to Component
 const mapStateToProps = (state) => {
 	return {
 		amount : state.amount,
+		errors : state.errors,
 	}
 };
 
 const mapDispatchProps = (dispatch) => {
 	return {
 		addRent  : (text, id) => dispatch( rentActions.addRent(text, id) ),
+		validate : (payload) => dispatch( rentActions.validate( payload ) ),
+		//validate  : (payload) => dispatch( rentActions.validate(payload) ),
 		// postAmounts  : (data) => dispatch( rentActions.postAmounts(data) ),
 		// fetchAmounts : () => dispatch( rentActions.fetchAmounts() )
 	}

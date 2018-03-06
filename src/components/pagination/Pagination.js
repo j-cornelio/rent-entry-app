@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes     		from 'prop-types';
 
-const RECORDS = 3;
+const RECORDS = 12;
 const pageAmount = (pages) => Math.ceil(pages.length / RECORDS);
 
 const Controls = ({next, currentPage, previous, pages, current}) => {
@@ -10,8 +10,7 @@ const Controls = ({next, currentPage, previous, pages, current}) => {
 		buttons.push(<button key={idx} style={(currentPage-1) === idx ? {background:'#ccc'} : {background:''}} onClick={() => {
 			current(idx+1);
 		}}>{idx+1}</button>)
-	}
-	//
+	}//
 	return (
 		<div>
 			<button onClick={previous}>BACK</button>
@@ -21,23 +20,44 @@ const Controls = ({next, currentPage, previous, pages, current}) => {
 		</div>
 	)
 };//
+Controls.propTypes = {
+	next 		: PropTypes.func.isRequired,
+  	currentPage : PropTypes.number,
+	previous 	: PropTypes.func.isRequired, 
+	current 	: PropTypes.func.isRequired, 
+	pages		: PropTypes.number,
+};
+Controls.defaultProps = {
+	pages 		: 0,
+	currentPage : 0
+};
 
-const NameList = ({data, next}) => {
+const NameList = ({ data }) => {
 	return (
 		data.map( (el, idx) => {
 			return el
 		})
 	)
 };
-//
+NameList.propTypes = {
+	data 		: PropTypes.array,
+};
+NameList.defaultProps = {
+	data 		: []
+};
+
 class Pagination extends Component{
 	static propTypes = {
-		data: PropTypes.array
+		data: PropTypes.array.isRequired
     }
 
 	constructor(props){
 		super(props);
-		
+
+		this.previous = this.previous.bind(this);
+		this.current  = this.current.bind(this);
+		this.next 	  = this.next.bind(this);
+
 		this.state = {
 			data		: this.props.data,
 			index		: 1,
@@ -117,10 +137,10 @@ class Pagination extends Component{
 				<NameList {...this.state} />
 				<Controls 
 					currentPage={this.state.currentPage}
-					next={this.next.bind(this)} 
-					previous={this.previous.bind(this)}
+					next={this.next} 
+					previous={this.previous}
 					pages={this.pages}
-					current={this.current.bind(this)} 
+					current={this.current} 
 				/>
 				{/*<h5>page: {this.state.index}</h5>*/}
 			</div>
