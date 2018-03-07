@@ -1,9 +1,15 @@
-import { combineReducers } 									from 'redux';
-import { rentReducer, isAmountLoading, validate } 					from './rentReducers';
+import { combineReducers } from 'redux';
+import { 
+	rentReducer, 
+	isAmountLoading, 
+	validate,
+	amountSet 
+} 							from './rentReducers';
 export default combineReducers({
-	amount				: rentReducer,
+	amount			: rentReducer,
+	errors 			: validate,
+	rentAmount 		: amountSet,
 	isAmountLoading,
-	errors: validate
 })
 
 //gets created as store, passed to Provider then connected - passed state as prop

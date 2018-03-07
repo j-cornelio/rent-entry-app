@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes     		from 'prop-types';
 import * as rentActions  	from '../../actions/rentActions';
 import ErrorDisplay 		from '../Error';
+import Dialog 				from '../Dialog';
 import { connect } 			from 'react-redux';
 
 /*
@@ -20,7 +21,7 @@ const
 
 const getData = (elem) => {
 	let inputValues	= {},
-			form 	= document.querySelector(elem);
+		form 		= document.querySelector(elem);
 			
 	for(var i=0; i<form.length; i+=1){//myForm not React array
 		if(form[i].type === 'text'){
@@ -28,7 +29,6 @@ const getData = (elem) => {
 			inputValues[propName] = form[i].value 			
 		}
 	}
-
 	return inputValues;
 }
 
@@ -80,6 +80,14 @@ const valid = (values, addRent, validate) => {
 	}
 };
 
+
+
+const Navigation = ({rentAmount}) => (
+	<nav>
+		<h5>AGREED RENT AMOUNT: {rentAmount}</h5>
+	</nav>
+);
+
 const Inputs = ({payment,  date, addRent, validate}) => {
 	var inputValues = {};
 	return (
@@ -105,17 +113,17 @@ const Inputs = ({payment,  date, addRent, validate}) => {
 	)
 }//
 Inputs.propTypes = {
-	data: PropTypes.array, 
-	addInput: PropTypes.func.isRequired, 
-	removeInput: PropTypes.func.isRequired, 
-	addRent: PropTypes.func.isRequired, 
-	validate: PropTypes.func,
-  	errors: PropTypes.array
+	data 		: PropTypes.array, 
+	addInput 	: PropTypes.func.isRequired, 
+	removeInput : PropTypes.func.isRequired, 
+	addRent 	: PropTypes.func.isRequired, 
+	validate 	: PropTypes.func,
+  	errors 		: PropTypes.array
 };
 Inputs.defaultProps = {
-	data: [],
-  	errors: [],
-  	validate: function(){}
+	data 		: [],
+  	errors    	: [],
+  	validate 	: function(){}
 };
 
 const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
@@ -123,45 +131,47 @@ const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
 	let myForm={}, inputValues={};
 
 	return (
-		<form  id="dataForm" ref={(form) => myForm = form}>
-			<ErrorDisplay errors={errors} />
-			
-			<input placeholder='month' id="month" type="text" />
-			<p className="errorMessage">Month is required</p>
+		<div>
+			<form  id="dataForm" ref={(form) => myForm = form}>
+				<ErrorDisplay errors={errors} />
+				
+				<input placeholder='month' id="month" type="text" />
+				<p className="errorMessage">Month is required</p>
 
-			{data.map( (el, idx) => (
-					<Inputs
-						{...el}
-						addRent 	= {addRent}
-						myForm		= {myForm}
-						removeInput = {removeInput} 
-						addInput 	= {addInput} 
-						key 		= {idx}
-					/>
-				)
-			)}
+				{data.map( (el, idx) => (
+						<Inputs
+							{...el}
+							addRent 	= {addRent}
+							myForm		= {myForm}
+							removeInput = {removeInput} 
+							addInput 	= {addInput} 
+							key 		= {idx}
+						/>
+					)
+				)}
 
-			<button onClick={(e) => {
-				e.preventDefault();
-				inputValues = getData('#dataForm');
+				<button onClick={(e) => {
+					e.preventDefault();
+					inputValues = getData('#dataForm');
 
-				valid(inputValues, addRent, validate);
-			}}>Send Data</button>
+					valid(inputValues, addRent, validate);
+				}}>Send Data</button>
 
-			<button onClick={(e) => {
-				e.preventDefault();
-				addInput();
-			}}>
-				add inputs
-			</button>
+				<button onClick={(e) => {
+					e.preventDefault();
+					addInput();
+				}}>
+					add inputs
+				</button>
 
-			<button onClick={(e) => {
-				e.preventDefault();
-				removeInput();
-			}}>
-				remove inputs
-			</button>
-		</form>
+				<button onClick={(e) => {
+					e.preventDefault();
+					removeInput();
+				}}>
+					remove inputs
+				</button>
+			</form>
+		</div>
 	)
 };//
 FormData.propTypes = {
@@ -179,18 +189,15 @@ FormData.defaultProps = {
 
 class FormAdd extends Component{
 	static propTypes = {
-		addRent: PropTypes.func.isRequired,
-		amount: PropTypes.array.isRequired,
+		addRent : PropTypes.func.isRequired,
+		amount 	: PropTypes.array.isRequired,
     }
 
-	state = {
-		data
-	}
+	state = { data }
 
 	removeInput(){
-		if(this.state.data.length === 1){
-			return 
-		}
+		if(this.state.data.length === 1) return false;
+		
 		this.setState((state) => {
 			count -= 1;
 			var last = state.data.length-1;
@@ -210,7 +217,7 @@ class FormAdd extends Component{
 					...state.data,
 					{ 
 						payment : 'payment ' + count, 
-						date 		: 'date ' + count 
+						date  	: 'date ' + count 
 					}
 				]
 			}
@@ -223,14 +230,20 @@ class FormAdd extends Component{
 
 	render(){
 		return (
-			<FormData 
-				{...this.state} 
-				{...this.props}
-				addRent 		= {this.props.addRent}
-				getData			= {this.getData.bind(this)} 
-				removeInput 	= {this.removeInput.bind(this)} 
-				addInput		= {this.addInput.bind(this)} 
-			/>
+			<div>
+				{!localStorage.AMOUNT ? <Dialog /> : null}
+
+				<Navigation {...this.props} />
+
+				<FormData 
+					{...this.state} 
+					{...this.props}
+					addRent 		= {this.props.addRent}
+					getData			= {this.getData.bind(this)} 
+					removeInput 	= {this.removeInput.bind(this)} 
+					addInput		= {this.addInput.bind(this)} 
+				/>
+			</div>
 		)
 	}
 };//
@@ -238,8 +251,9 @@ class FormAdd extends Component{
 // passed as props to Component
 const mapStateToProps = (state) => {
 	return {
-		amount : state.amount,
-		errors : state.errors,
+		amount 		: state.amount,
+		errors 		: state.errors,
+		rentAmount	: state.rentAmount
 	}
 };
 
