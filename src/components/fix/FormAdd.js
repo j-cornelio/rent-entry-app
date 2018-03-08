@@ -201,7 +201,7 @@ class FormAdd extends Component{
 
 	state = { data }
 
-	removeInput(){
+	removeInput = () => {
 		if(this.state.data.length === 1) return false;
 		
 		this.setState((state) => {
@@ -215,7 +215,7 @@ class FormAdd extends Component{
 		})
 	}
 
-	addInput(){
+	addInput = () => {
 		this.setState((state, props) => {
 			count += 1;
 			return {
@@ -230,10 +230,6 @@ class FormAdd extends Component{
 		})
 	}
 
-	getData(data){
-		console.log('%c getData data: ', 'background:lime', data);
-	}
-
 	render(){
 		return (
 			<div>
@@ -245,9 +241,8 @@ class FormAdd extends Component{
 					{...this.state} 
 					{...this.props}
 					addRent 		= {this.props.addRent}
-					getData			= {this.getData.bind(this)} 
-					removeInput 	= {this.removeInput.bind(this)} 
-					addInput		= {this.addInput.bind(this)} 
+					removeInput 	= {this.removeInput} 
+					addInput		= {this.addInput} 
 				/>
 			</div>
 		)
