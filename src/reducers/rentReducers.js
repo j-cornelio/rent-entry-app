@@ -132,8 +132,6 @@ export const amountSet = (state=RENTAMOUNT, action) => {
 			return action.amount;
 			
 		default:
-			//if(isNaN(RENTAMOUNT)) RENTAMOUNT = 0
-			console.log('RENTAMOUNT: ', RENTAMOUNT)
 			return state;
 	}
 };
