@@ -87,6 +87,12 @@ const Navigation = ({rentAmount}) => (
 		<h5>AGREED RENT AMOUNT: {rentAmount}</h5>
 	</nav>
 );
+Navigation.propTypes = {
+	rentAmount: PropTypes.number
+};
+Navigation.defaultProps = {
+	rentAmount: 0
+};
 
 const Inputs = ({payment,  date, addRent, validate}) => {
 	var inputValues = {};
@@ -175,16 +181,16 @@ const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
 	)
 };//
 FormData.propTypes = {
-	data: PropTypes.array, 
-	addInput: PropTypes.func.isRequired, 
-	removeInput: PropTypes.func.isRequired, 
-	addRent: PropTypes.func.isRequired, 
-	validate: PropTypes.func.isRequired,
-  	errors: PropTypes.array
+	data 		: PropTypes.array, 
+	addInput	: PropTypes.func.isRequired, 
+	removeInput : PropTypes.func.isRequired, 
+	addRent		: PropTypes.func.isRequired, 
+	validate	: PropTypes.func.isRequired,
+  	errors 		: PropTypes.array
 };
 FormData.defaultProps = {
-	data: [],
-  	errors: []
+	data 		: [],
+  	errors 		: []
 };
 
 class FormAdd extends Component{

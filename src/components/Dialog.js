@@ -28,7 +28,13 @@ class Dialog extends Component{
 			<div id="dialog">
 				<p>{this.state.open}</p>
 				<p>Enter Rent Amount</p> 
-				<p><input ref={a => this.amount = a} type="text" /></p>
+				<p><input ref={a => this.amount = a} type="text" onKeyPress={(e)=> {
+						if(e.charCode === 13){
+							e.preventDefault();
+							this.handleSubmit(this.amount.value)
+						}
+					}}
+					/></p>
 				<div>
 					<button onClick={(e) => {
 						this.handleSubmit(this.amount.value)
