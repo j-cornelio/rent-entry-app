@@ -4,6 +4,7 @@ import * as rentActions  	from '../../actions/rentActions';
 import ErrorDisplay 		from '../Error';
 import Dialog 				from '../Dialog';
 import { connect } 			from 'react-redux';
+import TextField			from '../material/TextField';
 
 /*
 NOTE: e.preventDefault on buttons. refreshes page
@@ -99,11 +100,11 @@ const Inputs = ({payment,  date, addRent, validate}) => {
 	return (
 		<div className="flex-container">
 			<div className="child">
-				<input placeholder={payment} type="text" />
+				<TextField hintText={payment} />
 				<p className="errorMessage"></p>
 			</div>
 			<div className="child">
-				<input placeholder={date} type="text" onKeyPress={(e)=> {
+				<TextField hintText={date} onKeyPress={(e)=> {
 						if(e.charCode === 13){
 							e.preventDefault();
 
@@ -111,8 +112,8 @@ const Inputs = ({payment,  date, addRent, validate}) => {
 
 							valid(inputValues, addRent, validate);
 						}
-					}}
-				/>
+					}} />
+
 				<p className="errorMessage">Date is required</p>
 			</div>
 		</div>
@@ -141,7 +142,7 @@ const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
 			<form  id="dataForm" ref={(form) => myForm = form}>
 				<ErrorDisplay errors={errors} />
 				
-				<input placeholder='month' id="month" type="text" />
+				<TextField hintText="month" />
 				<p className="errorMessage">Month is required</p>
 
 				{data.map( (el, idx) => (

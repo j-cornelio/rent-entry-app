@@ -1,7 +1,7 @@
-let RENTAMOUNT = !!localStorage.AMOUNT ? localStorage.AMOUNT : 0;
+let RENTAMOUNT = !!localStorage.AMOUNT ? Number(localStorage.AMOUNT) : 0;
 
 // temporaty storage.  laster store in SQL
-var initalState = !!localStorage.rents ? JSON.parse(localStorage.rents) : [];
+const initalState = !!localStorage.rents ? JSON.parse(localStorage.rents) : [];
 
 const getProperties 	= (amount) => (
 	Object.keys(amount)
@@ -14,14 +14,13 @@ const addAllPayments 	= (payments, action) => (
 		.reduce( (total, pay) => total + pay)
 );
 
-const amountOwed 			= (month) => Number(localStorage.AMOUNT) - month;
+const amountOwed 		= (month) => Number(localStorage.AMOUNT) - month;
 const getLastElem 		= (arr) => arr[arr.length - 1];
-const totalOwed 			= (amount) => (!!amount && !!amount.owed) ? amount.owed : 0;
+const totalOwed 		= (amount) => (!!amount && !!amount.owed) ? amount.owed : 0;
 
 export const rentReducer = (state=initalState, action={}) => {
 	switch(action.type){
 		case 'ADD_RENT':
-
 			const 
 				payments 		= getProperties(action.amount),
 				monthTotal 		= addAllPayments(payments, action),
@@ -58,7 +57,7 @@ export const rentReducer = (state=initalState, action={}) => {
 		case 'EDIT_RENT':
 				let 
 					updatedData = null,
-					selected 		= state[action.index].payment1,
+					selected 	= state[action.index].payment1,
 					increaseAll = Number(selected) - action.amount;
 
 				if(action.month){
