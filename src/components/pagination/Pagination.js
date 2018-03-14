@@ -7,7 +7,7 @@ const pageAmount = (pages) => Math.ceil(pages.length / RECORDS);
 const Controls = ({next, currentPage, previous, pages, current}) => {
 	let buttons = [];
 	for(let idx=0; idx<pages; idx+=1){
-		buttons.push(<button key={idx} style={(currentPage-1) === idx ? {background:'#ccc'} : {background:''}} onClick={() => {
+		buttons.push(<button key={idx} style={(currentPage-1) === idx ? {background:'#ddd'} : {background:''}} onClick={() => {
 			current(idx+1);
 		}}>{idx+1}</button>)
 	}//
@@ -133,7 +133,7 @@ class Pagination extends Component{
 
 	render(){
 		return (
-			<div>
+			<div id="pagination">
 				<NameList {...this.state} />
 				<Controls 
 					currentPage={this.state.currentPage}

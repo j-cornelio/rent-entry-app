@@ -4,8 +4,9 @@ import * as rentActions  	from '../../actions/rentActions';
 import ErrorDisplay 		from '../Error';
 import { connect } 			from 'react-redux';
 import TextField			from '../material/TextField';
-import RaisedButton 			from '../material/RaisedButton';
+import RaisedButton 		from '../material/RaisedButton';
 import Dialog 				from '../material/Dialog';
+import styles 				from '../../styles.css';
 
 /*
 NOTE: e.preventDefault on buttons. refreshes page
@@ -16,10 +17,10 @@ var count = 1;
 
 /* eslint-disable */
 const 
-	SPECIALC 		= /[^\w\-/ ]/, 
+	SPECIALC 		= /[^\w\-/ ]/,
 	data 			= [{payment:'payment 1', date:'date 1'}],
 	removeSpaces 	= str => str.replace(/ +/g, ""),
-	randomNum 		= () => Math.floor(Math.random() * 1000000000); 
+	randomNum 		= () => Math.floor(Math.random() * 1000000000);
 
 const getData = (elem) => {
 	let inputValues	= {},
@@ -43,11 +44,20 @@ const valid = (values, addRent, validate) => {
 
 	//for inputs
 	for(var key of inputs){
-		key.classList.remove('errorInput');
+		if(key.nextSibling.getElementsByTagName('p').length > 0){
+			var p = key.nextSibling.getElementsByTagName('p')[0];
+			key.nextSibling.removeChild(p);			
+
+			key.nextSibling.firstChild.classList.remove('lineError')
+		}
 
 		if(SPECIALC.test( key.value )){
-			key.classList.add('errorInput');
-			key.nextSibling.innerText = 'special characters';
+			let err = document.createElement('p');
+			err.innerText = 'special characters';
+			err.classList.add('errorValidation');
+
+			key.nextSibling.appendChild(err);
+			key.nextSibling.firstChild.classList.add('lineError')
 		}
 
 		if(key.value.length === 0){
@@ -56,10 +66,7 @@ const valid = (values, addRent, validate) => {
 			err.classList.add('errorValidation');
 
 			key.nextSibling.appendChild(err);
-
 			key.nextSibling.firstChild.classList.add('lineError')
-			// key.classList.add('errorInput');
-			// key.nextSibling.innerText = 'required field';
 	    }
 	}
 
