@@ -1,4 +1,4 @@
-import request from 'superagent';
+import request          from 'superagent';
 import * as actionTypes from './actionTypes';
 
  /* eslint-disable */

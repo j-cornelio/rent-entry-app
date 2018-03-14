@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes     		from 'prop-types';
 import * as rentActions  	from '../../actions/rentActions';
 import ErrorDisplay 		from '../Error';
-import Dialog 				from '../Dialog';
 import { connect } 			from 'react-redux';
 import TextField			from '../material/TextField';
+import FlatButton 			from '../material/FlatButton';
+import Dialog 				from '../material/Dialog';
 
 /*
 NOTE: e.preventDefault on buttons. refreshes page
@@ -50,8 +51,15 @@ const valid = (values, addRent, validate) => {
 		}
 
 		if(key.value.length === 0){
-			key.classList.add('errorInput');
-			key.nextSibling.innerText = 'required field';
+			let err = document.createElement('p');
+			err.innerText = 'required field';
+			err.classList.add('errorValidation');
+
+			key.nextSibling.appendChild(err);
+
+			key.nextSibling.firstChild.classList.add('lineError')
+			// key.classList.add('errorInput');
+			// key.nextSibling.innerText = 'required field';
 	    }
 	}
 
@@ -200,7 +208,15 @@ class FormAdd extends Component{
 		amount 	: PropTypes.array.isRequired,
     }
 
-	state = { data }
+	state = { 
+		data,
+		open: false 
+	}
+
+	componentWillMount() {
+		if(!localStorage.AMOUNT) 
+			this.setState((state) => ({open: true})                                                                 )
+	}
 
 	removeInput = () => {
 		if(this.state.data.length === 1) return false;
@@ -231,11 +247,33 @@ class FormAdd extends Component{
 		})
 	}
 
+	handleOpen = () => {
+		this.setState( state => ({open : true}) )
+	}
+
+	handleClose = () => {
+		this.setState( state => ({ open: false }) )
+	}
+
+	handleSubmit = () => {
+		let data = document.querySelector('#amountInput').value;
+
+		data = parseInt(data, 10);
+
+		if(isNaN(data))
+			return alert('Please Enter Number');
+		
+		localStorage.AMOUNT = data;
+		this.props.amountSet(data);
+
+		this.handleClose();   
+	}
+
 	render(){
+		let a = null;
 		return (
 			<div>
-				{!localStorage.AMOUNT ? <Dialog /> : null}
-
+				<h4>{JSON.stringify(this.state.open)}</h4>
 				<Navigation {...this.props} />
 
 				<FormData 
@@ -245,6 +283,12 @@ class FormAdd extends Component{
 					removeInput 	= {this.removeInput} 
 					addInput		= {this.addInput} 
 				/>
+
+
+		    	<Dialog title="Please Enter Agreed Rent" {...this.state} handleClose={this.handleClose}>
+		    		<TextField id="amountInput" hintText="amount" />
+		    		<FlatButton label="Submit" onClick={this.handleSubmit} />
+		    	</Dialog>
 			</div>
 		)
 	}
@@ -263,6 +307,7 @@ const mapDispatchProps = (dispatch) => {
 	return {
 		addRent  : (text, id) => dispatch( rentActions.addRent(text, id) ),
 		validate : (payload) => dispatch( rentActions.validate( payload ) ),
+		amountSet : amount => dispatch({type:'AMOUNT_SET', amount}),
 		//validate  : (payload) => dispatch( rentActions.validate(payload) ),
 		// postAmounts  : (data) => dispatch( rentActions.postAmounts(data) ),
 		// fetchAmounts : () => dispatch( rentActions.fetchAmounts() )

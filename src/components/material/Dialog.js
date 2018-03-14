@@ -2,19 +2,23 @@ import React, { Component } 		from 'react';
 import FlatButton 					from './FlatButton';
 import PropTypes    				from 'prop-types';
 
-var DIV = document.createElement('div');
 
 class Dialog extends Component{
-	componentWillReceiveProps(nextProps) {
-		if(nextProps.open){
+	componentDidMount() {
+		if(!localStorage.AMOUNT){
+			var DIV = document.createElement('div');
+		
 			document.querySelector('#dialog').classList.add('dialogMove');
 
 			DIV.classList.add('overlay');
+			
 			document.body.appendChild(DIV);
-
-			DIV.onclick = nextProps.handleClose;
 		}
-		if(!nextProps.open){
+
+		//DIV.onclick = this.props.handleClose;
+	}
+	componentWillReceiveProps(nextProps) {
+		if(this.props.open !== nextProps.open){
 			const overlay = document.querySelector('.overlay');
 
 
@@ -38,7 +42,6 @@ class Dialog extends Component{
 						<h3>{title}</h3>
 						<div className="children">{children}</div>
 						<footer>
-							<FlatButton label="Cancel"  onClick={handleClose} />
 						</footer>
 					</div>
 				</div>

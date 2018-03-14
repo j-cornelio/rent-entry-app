@@ -34,7 +34,7 @@ const inputs = {
     height: '100%'
 }
 
-const TextField = ({hintText, onKeyPress}) => {
+const TextField = ({hintText, onKeyPress, id}) => {
     let a = '';
 
 	return (
@@ -44,6 +44,7 @@ const TextField = ({hintText, onKeyPress}) => {
                 type="text"  
                 style={inputs} 
                 placeholder={hintText} 
+                id={id}
                 onFocus={() => {
                     a.classList.add('expand');
                 }}
