@@ -6,7 +6,7 @@ import { connect } 			from 'react-redux';
 import TextField			from '../material/TextField';
 import RaisedButton 		from '../material/RaisedButton';
 import Dialog 				from '../material/Dialog';
-import styles 				from '../../styles.css';
+import styles 				from '../../css/styles.css';
 
 /*
 NOTE: e.preventDefault on buttons. refreshes page
@@ -49,6 +49,17 @@ const valid = (values, addRent, validate) => {
 			key.nextSibling.removeChild(p);			
 
 			key.nextSibling.firstChild.classList.remove('lineError')
+		}
+
+		if(key.placeholder.indexOf('payment') === 0){
+			let err = document.createElement('p');
+			if( isNaN(Number(key.value))  ){
+				err.innerText = 'payment is only numbers';
+				err.classList.add('errorValidation');
+
+				key.nextSibling.appendChild(err);
+				key.nextSibling.firstChild.classList.add('lineError')
+			}
 		}
 
 		if(SPECIALC.test( key.value )){
@@ -299,7 +310,7 @@ class FormAdd extends Component{
 
 		    	<Dialog title="Please Enter Agreed Rent" {...this.state} handleClose={this.handleClose}>
 		    		<TextField id="amountInput" hintText="amount" />
-		    		<RaisedButton label="Default" onClick={this.handleSubmit} />
+		    		<RaisedButton label="Submit" onClick={this.handleSubmit} />
 		    	</Dialog>
 			</div>
 		)
