@@ -5,6 +5,7 @@ import { connect } 							from 'react-redux';
 import PropTypes  							from 'prop-types';
 import FormAdd  								from './FormAdd';
 import AmountList    						from './containers/amount-data/AmountList';
+import RaisedButton 			from '../material/RaisedButton';
 
 class Amount extends Component{
 
@@ -14,7 +15,7 @@ class Amount extends Component{
 		updateIndex : null
 	}
 
-	toggleEdit(){
+	toggleEdit = () => {
 		this.setState((state, props) => {
 			return { 
 				edit 	 			: !state.edit,
@@ -24,7 +25,7 @@ class Amount extends Component{
 		})
 	}
 
-	toggleUpdate(idx){
+	toggleUpdate = (idx) => {
 		this.setState((state, props) => {
 			return { 
 				update 			: !state.update,
@@ -36,11 +37,16 @@ class Amount extends Component{
 	render(){
 		return (
 			<div>
-				<h2>Rent Entry System</h2>
-				<button className="edit" onClick={this.toggleEdit.bind(this)}>edit</button>
+				<h2>Rent Data Entry System</h2>
+				<RaisedButton 
+					style={{float: 'right'}}
+					label="Edit" 
+					primary={true}
+					onClick={this.toggleEdit} 
+				/>
 				<FormAdd  {...this.props} />
 				<hr />
-				<AmountList {...this.state} toggleUpdate={this.toggleUpdate.bind(this)} />
+				<AmountList {...this.state} toggleUpdate={this.toggleUpdate} />
 				<hr />
 			</div>
 		)

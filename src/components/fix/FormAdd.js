@@ -4,7 +4,7 @@ import * as rentActions  	from '../../actions/rentActions';
 import ErrorDisplay 		from '../Error';
 import { connect } 			from 'react-redux';
 import TextField			from '../material/TextField';
-import FlatButton 			from '../material/FlatButton';
+import RaisedButton 			from '../material/RaisedButton';
 import Dialog 				from '../material/Dialog';
 
 /*
@@ -152,7 +152,7 @@ const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
 				
 				<TextField hintText="month" />
 				<p className="errorMessage">Month is required</p>
-
+				
 				{data.map( (el, idx) => (
 						<Inputs
 							{...el}
@@ -165,26 +165,31 @@ const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
 					)
 				)}
 
-				<button onClick={(e) => {
-					e.preventDefault();
-					inputValues = getData('#dataForm');
+    			<RaisedButton 
+    				label="Submit"
+    				 primary={true}
+    				onClick={(e) => {
+						e.preventDefault();
+						inputValues = getData('#dataForm');
 
-					valid(inputValues, addRent, validate);
-				}}>Send Data</button>
+						valid(inputValues, addRent, validate);
+					}} />
 
-				<button onClick={(e) => {
-					e.preventDefault();
-					addInput();
-				}}>
-					add inputs
-				</button>
+				<RaisedButton 
+					label="Add Input"
+					 primary={true} 
+					onClick={(e) => {
+						e.preventDefault();
+						addInput();
+					}} />
 
-				<button onClick={(e) => {
-					e.preventDefault();
-					removeInput();
-				}}>
-					remove inputs
-				</button>
+				<RaisedButton 
+					label="Remove Input"
+					primary={true} 
+					onClick={(e) => {
+						e.preventDefault();
+						removeInput();
+					}} />
 			</form>
 		</div>
 	)
@@ -273,7 +278,7 @@ class FormAdd extends Component{
 		let a = null;
 		return (
 			<div>
-				<h4>{JSON.stringify(this.state.open)}</h4>
+				{/*<h4>{JSON.stringify(this.state.open)}</h4>*/}
 				<Navigation {...this.props} />
 
 				<FormData 
@@ -287,7 +292,7 @@ class FormAdd extends Component{
 
 		    	<Dialog title="Please Enter Agreed Rent" {...this.state} handleClose={this.handleClose}>
 		    		<TextField id="amountInput" hintText="amount" />
-		    		<FlatButton label="Submit" onClick={this.handleSubmit} />
+		    		<RaisedButton label="Default" onClick={this.handleSubmit} />
 		    	</Dialog>
 			</div>
 		)
