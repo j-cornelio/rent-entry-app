@@ -35,6 +35,7 @@ const getData = (elem) => {
 	return inputValues;
 }
 
+
 const valid = (values, addRent, validate) => {
 	let 
 		form 	= document.querySelector('#dataForm'),
@@ -42,8 +43,9 @@ const valid = (values, addRent, validate) => {
 		regTest = false,
 		message = [];
 
-	//for inputs
+	//loop over inputs
 	for(var key of inputs){
+		// reset message
 		if(key.nextSibling.getElementsByTagName('p').length > 0){
 			var p = key.nextSibling.getElementsByTagName('p')[0];
 			key.nextSibling.removeChild(p);			
@@ -51,6 +53,32 @@ const valid = (values, addRent, validate) => {
 			key.nextSibling.firstChild.classList.remove('lineError')
 		}
 
+		//make sure it's a month
+		if(key.placeholder.indexOf('month') === 0){
+			let res = [];
+			let month = key.value.toLowerCase().trim();
+			const monthsArr = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+				
+				let currentMonth = monthsArr.forEach( (m) => {
+				    if(m.indexOf(month) === -1){
+				    	res.push(false)
+					}
+
+			  })
+			if( res.length === 12 ){
+				let err = document.createElement('p');
+				err.innerText = 'please enter valid month';
+				err.classList.add('errorValidation');
+
+				key.nextSibling.appendChild(err);
+				key.nextSibling.firstChild.classList.add('lineError')				
+
+			}
+
+
+		}
+
+		//make sure enter number for payment
 		if(key.placeholder.indexOf('payment') === 0){
 			let err = document.createElement('p');
 			if( isNaN(Number(key.value))  ){
@@ -61,7 +89,7 @@ const valid = (values, addRent, validate) => {
 				key.nextSibling.firstChild.classList.add('lineError')
 			}
 		}
-
+		// check special characters
 		if(SPECIALC.test( key.value )){
 			let err = document.createElement('p');
 			err.innerText = 'special characters';
@@ -70,7 +98,7 @@ const valid = (values, addRent, validate) => {
 			key.nextSibling.appendChild(err);
 			key.nextSibling.firstChild.classList.add('lineError')
 		}
-
+		// check length
 		if(key.value.length === 0){
 			let err = document.createElement('p');
 			err.innerText = 'required field';
