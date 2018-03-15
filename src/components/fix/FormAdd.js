@@ -43,78 +43,57 @@ const valid = (values, addRent, validate) => {
 		regTest = false,
 		message = [];
 
-	//loop over inputs
-	for(var key of inputs){
+	//loop over each input and error para
+	for(var input of inputs){
 		// reset message
-		if(key.nextSibling.getElementsByTagName('p').length > 0){
-			var p = key.nextSibling.getElementsByTagName('p')[0];
-			key.nextSibling.removeChild(p);			
-
-			key.nextSibling.firstChild.classList.remove('lineError')
-		}
-
+		input.nextSibling.firstChild.classList.remove('lineError');
+		input.parentNode.nextSibling.innerText = '';
+		
 		//make sure it's a month
-		if(key.placeholder.indexOf('month') === 0){
-			let res = [];
-			let month = key.value.toLowerCase().trim();
-			const monthsArr = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
+		if(input.placeholder.indexOf('month') === 0){
+			let res 		= [],
+				month 		= input.value.toLowerCase().trim(),
+				monthsArr 	= ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december'];
 				
-				let currentMonth = monthsArr.forEach( (m) => {
-				    if(m.indexOf(month) === -1){
-				    	res.push(false)
-					}
-
-			  })
+			let currentMonth = monthsArr.forEach( (m) => {
+			    if(m.indexOf(month) === -1){
+			    	res.push(false)
+				}
+		  	});
 			if( res.length === 12 ){
-				let err = document.createElement('p');
-				err.innerText = 'please enter valid month';
-				err.classList.add('errorValidation');
-
-				key.nextSibling.appendChild(err);
-				key.nextSibling.firstChild.classList.add('lineError')				
-
+				input.parentNode.nextSibling.innerText = 'please enter valid month';
+				input.nextSibling.firstChild.classList.add('lineError')				
 			}
-
-
 		}
 
 		//make sure enter number for payment
-		if(key.placeholder.indexOf('payment') === 0){
+		if(input.placeholder.indexOf('payment') === 0){
 			let err = document.createElement('p');
-			if( isNaN(Number(key.value))  ){
-				err.innerText = 'payment is only numbers';
-				err.classList.add('errorValidation');
-
-				key.nextSibling.appendChild(err);
-				key.nextSibling.firstChild.classList.add('lineError')
+			if( isNaN(Number(input.value))  ){
+				input.parentNode.nextSibling.innerText = 'payment is only numbers';
+				
+				input.nextSibling.firstChild.classList.add('lineError')
 			}
 		}
 		// check special characters
-		if(SPECIALC.test( key.value )){
+		if(SPECIALC.test( input.value )){
 			let err = document.createElement('p');
-			err.innerText = 'special characters';
-			err.classList.add('errorValidation');
-
-			key.nextSibling.appendChild(err);
-			key.nextSibling.firstChild.classList.add('lineError')
+			input.parentNode.nextSibling.innerText = 'special characters';
+			input.nextSibling.firstChild.classList.add('lineError')
 		}
 		// check length
-		if(key.value.length === 0){
+		if(input.value.length === 0){
 			let err = document.createElement('p');
-			err.innerText = 'required field';
-			err.classList.add('errorValidation');
-
-			key.nextSibling.appendChild(err);
-			key.nextSibling.firstChild.classList.add('lineError')
+			input.parentNode.nextSibling.innerText = 'required field';
+			input.nextSibling.firstChild.classList.add('lineError')
 	    }
 	}
 
 	// for error message box
 	Object.keys(values)
 		.forEach( el =>  {
-			if(values[el].length === 0){
+			if(values[el].length === 0)
 				message.push(el + ' is empty');
-			}
 			
 			if(SPECIALC.test( values[el] )){
 				message.push(el + ' Please remove special characters');
@@ -168,7 +147,7 @@ const Inputs = ({payment,  date, addRent, validate}) => {
 						}
 					}} />
 
-				<p className="errorMessage">Date is required</p>
+				<p className="errorMessage"></p>
 			</div>
 		</div>
 	)
@@ -197,7 +176,7 @@ const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
 				<ErrorDisplay errors={errors} />
 				
 				<TextField hintText="month" />
-				<p className="errorMessage">Month is required</p>
+				<p className="errorMessage"></p>
 				
 				{data.map( (el, idx) => (
 						<Inputs
