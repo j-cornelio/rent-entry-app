@@ -6,7 +6,6 @@ import { connect } 			from 'react-redux';
 import TextField			from '../material/TextField';
 import RaisedButton 		from '../material/RaisedButton';
 import Dialog 				from '../material/Dialog';
-import styles 				from '../../css/styles.css';
 
 /*
 NOTE: e.preventDefault on buttons. refreshes page
@@ -48,7 +47,7 @@ const valid = (values, addRent, validate) => {
 		// reset message
 		input.nextSibling.firstChild.classList.remove('lineError');
 		input.parentNode.nextSibling.innerText = '';
-		
+
 		//make sure it's a month
 		if(input.placeholder.indexOf('month') === 0){
 			let res 		= [],
@@ -70,8 +69,7 @@ const valid = (values, addRent, validate) => {
 		if(input.placeholder.indexOf('payment') === 0){
 			let err = document.createElement('p');
 			if( isNaN(Number(input.value))  ){
-				input.parentNode.nextSibling.innerText = 'payment is only numbers';
-				
+				input.parentNode.nextSibling.innerText = 'payment requires numbers';
 				input.nextSibling.firstChild.classList.add('lineError')
 			}
 		}
@@ -153,16 +151,12 @@ const Inputs = ({payment,  date, addRent, validate}) => {
 	)
 }//
 Inputs.propTypes = {
-	data 		: PropTypes.array, 
-	addInput 	: PropTypes.func.isRequired, 
-	removeInput : PropTypes.func.isRequired, 
+	payment 	: PropTypes.string.isRequired,
+	date 		: PropTypes.string.isRequired,  
 	addRent 	: PropTypes.func.isRequired, 
 	validate 	: PropTypes.func,
-  	errors 		: PropTypes.array
 };
 Inputs.defaultProps = {
-	data 		: [],
-  	errors    	: [],
   	validate 	: function(){}
 };
 
@@ -220,7 +214,7 @@ const FormData = ({data, addInput, removeInput, addRent, validate, errors}) => {
 	)
 };//
 FormData.propTypes = {
-	data 		: PropTypes.array, 
+	data 		: PropTypes.arrayOf(PropTypes.object), 
 	addInput	: PropTypes.func.isRequired, 
 	removeInput : PropTypes.func.isRequired, 
 	addRent		: PropTypes.func.isRequired, 

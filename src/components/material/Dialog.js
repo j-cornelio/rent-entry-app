@@ -14,7 +14,6 @@ class Dialog extends Component{
 			
 			document.body.appendChild(DIV);
 		}
-
 		//DIV.onclick = this.props.handleClose;
 	}
 	componentWillReceiveProps(nextProps) {
@@ -34,7 +33,7 @@ class Dialog extends Component{
 	}
 
 	render(){
-		let { title, open, handleClose, children } = this.props;
+		let { title, open, children } = this.props;
 		if(open){
 			return (
 				<div id="dialog">

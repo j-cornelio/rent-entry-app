@@ -30,7 +30,7 @@ const RaisedButton = ({label, primary, secondary, disabled, onClick, style, clas
 			<div className="buttonWrap" style={style}>
 				<button 
 					onClick={onClick} 
-					className = {theStyles}
+					className={theStyles}
 				>
 					<span>{label}</span>
 				</button>
